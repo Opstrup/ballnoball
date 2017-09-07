@@ -274,23 +274,23 @@ def experiment(c):
 def main():
     print("Tensorflow version: ", tf.__version__)
 
-    dataset_zip = 'ballnoball.zip'
+    dataset_zip = 'ballnoball2.zip'
     
     print("Opening dataset archive:", dataset_zip)
     training_files = []
+    validation_files = []
     dataset_zip=zipfile.ZipFile(dataset_zip, mode='r')
     for n in dataset_zip.namelist():
         if n.lower().endswith(".png"):
-            training_files.append(n)
+            if "training" in n:
+                training_files.append(n)
+            else:
+                validation_files.append(n)
+    
     random.seed = 42
     random.shuffle(training_files)
-
-    cut = math.floor(len(training_files)*0.8)
-
-    validation_files = training_files[cut:]
-    training_files = training_files[:cut]
+    random.shuffle(validation_files)
     print("%d training images"%(len(training_files)))
-    
     print("%d validation images"%(len(validation_files)))
     
     configurations = []
